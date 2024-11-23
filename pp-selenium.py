@@ -169,7 +169,7 @@ def scrape_pp():
         try:
             # Close the location prompt
             click_modal_button(driver)
-            time.sleep(3)
+            time.sleep(1+random.random())
         except Exception as e:
             print(f"Error closing location prompt: {e}")
 
@@ -200,7 +200,7 @@ def scrape_pp():
                     # Click the Type A button
                     # a_button.click()
                     ActionChains(driver).move_to_element(a_button).click().perform()
-                    time.sleep(5)  # Wait for the page to update
+                    time.sleep(1+random.random())  # Wait for the page to update
 
                 # Find all Type B buttons under the current Type A category
                 type_b_buttons = driver.find_elements(By.CSS_SELECTOR, 'button.mx-2.border-b-2')
@@ -221,7 +221,7 @@ def scrape_pp():
                             # Click the Type B button
                             ActionChains(driver).move_to_element(b_button).click().perform()
                             # b_button.click()
-                            time.sleep(5)  # Wait for the page to update
+                            time.sleep(1+random.random())  # Wait for the page to update
 
                         # Pretty print the current driver page_source
                         # print(BeautifulSoup(driver.page_source, "html.parser").prettify())
@@ -269,6 +269,7 @@ def scrape_pp():
         # Close the browser
         driver.quit()
 
+    print(f"PROCESSED PAGE FROM {TIMESTAMP}")
     return out
 
 
