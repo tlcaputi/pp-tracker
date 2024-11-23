@@ -10,7 +10,7 @@ counter=0
 while true; do
 
     # Perform git operations every 5 runs
-    if ((counter % 2 == 0)); then
+    if ((counter % 1 == 0)); then
         timestamp=$(date '+%Y-%m-%d %H:%M:%S')
         git add .
         git commit -m "updating parlayplay plot for ${timestamp}"

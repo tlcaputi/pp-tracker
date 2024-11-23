@@ -232,7 +232,7 @@ def scrape_pp():
                             change_card_style_button = driver.find_element(By.CSS_SELECTOR, 
                                 'button[aria-label="Change card style from list"]')
                             change_card_style_button.click()
-                            time.sleep(2)  # Wait for the page to update
+                            time.sleep(1+random.random())  # Wait for the page to update
                         except Exception as e:
                             pass
                             # print(f"Error clicking 'Change card style' button: {e}")
