@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Set the directory to your project
-cd /home/theo/betting
+cd /home/theo/pp-tracker
 
 # Initialize the counter
 counter=0
@@ -18,7 +18,7 @@ while true; do
     fi
 
     # Run the Python script using the local pyenv Python version
-    pyenv exec python /home/theo/betting/pp-selenium.py
+    pyenv exec python /home/theo/pp-tracker/pp-selenium.py
 
     # Increment the counter
     ((counter++))
