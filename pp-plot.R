@@ -5,12 +5,16 @@ pacman::p_load(logger, glue, dplyr, tidyverse, lubridate)
 
 # Go through and process all csv files in the output-pp-selenium directory
 csv_files = rev(list.files("output-pp-selenium", pattern=".csv", full.names=TRUE))
-for(csv_file in csv_files){
+for(idx in seq_along(csv_files)) {
+
+    csv_file = csv_files[idx]
 
     log_info("Processing {csv_file}")
 
-    outfn = gsub(".csv", ".pdf", csv_file)
+    multiplierfn = gsub(".csv", ".pdf", csv_file)
     productfn = gsub(".csv", "-product.pdf", csv_file)
+    current_multiplier_fn = "current-multiplier.pdf"
+    current_product_fn = "current-product.pdf"
 
     # Read in data
     df = read_csv(csv_file)
@@ -166,8 +170,14 @@ for(csv_file in csv_files){
         )
 
     # Save plot
-    ggsave(outfn, p, width=10, height=5)
-    log_info("Saved {outfn}")
+    ggsave(multiplierfn, p, width = 10, height = 5)
+    log_info("Saved {multiplierfn}")
+
+    if(idx == 1){
+        # Save the current multiplier plot
+        ggsave(current_multiplier_fn, p, width = 10, height = 5)
+        log_info("Saved {current_multiplier_fn}")
+    }
 
 
     ## PRODUCT PLOT
@@ -217,6 +227,12 @@ for(csv_file in csv_files){
     # Save plot
     ggsave(productfn, p, width = 10, height = 5)
     log_info("Saved {productfn}")
+
+    if(idx == 1){
+        # Save the current product plot
+        ggsave(current_product_fn, p, width = 10, height = 5)
+        log_info("Saved {current_product_fn}")
+    }
 
 
 }
