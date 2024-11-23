@@ -184,8 +184,10 @@ def scrape_pp():
             id = button.get_attribute("id")
             if id == "league-Promo":
                 continue
-            if any(x.upper() in id for x in ["NBA", "NFL", "NHL", "MLB"]):
+            if any(x.upper() in id for x in ["NBA"]):
                 filtered_type_a_buttons.append(button)
+            # if any(x.upper() in id for x in ["NBA", "NFL", "NHL", "MLB"]):
+            #     filtered_type_a_buttons.append(button)
 
         # Iterate over each Type A button
         for idx_a, a_button in enumerate(filtered_type_a_buttons):
@@ -204,7 +206,7 @@ def scrape_pp():
                 type_b_buttons = driver.find_elements(By.CSS_SELECTOR, 'button.mx-2.border-b-2')
 
                 # Iterate over each Type B button
-                for idx_b, b_button in enumerate(type_b_buttons):
+                for idx_b, b_button in enumerate(type_b_buttons[:2]):
 
                     try:
                         TIMESTAMP_STRING = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
