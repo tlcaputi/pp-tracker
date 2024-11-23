@@ -1,8 +1,9 @@
 
 
-
+if(!require("pacman")) install.packages("pacman")
 pacman::p_load(logger, glue, dplyr, tidyverse, lubridate)
 
+# Go through and process all csv files in the output-pp-selenium directory
 csv_files = rev(list.files("output-pp-selenium", pattern=".csv", full.names=TRUE))
 for(csv_file in csv_files){
 
@@ -33,19 +34,22 @@ for(csv_file in csv_files){
         text = glue("{substr(text, 1, half_text_nchar)}\n{substr(text, half_text_nchar + 1, text_nchar)}"),
     )
 
-    if("player_name" %in% colnames(df)){
-        df = df %>% 
+    # When the data is correctly parsed, we can create a better text field
+    try({
+        df = df %>%
             mutate(
                 text = glue("{player_name} {number} {stat}\n{game}-{game_time} ({multiplier1} x {multiplier2} = {product})")
             )
-    }
+    })
 
-    if("type_a" %in% colnames(df)){
-        df = df %>% 
+    # Remove college games, which I can't bet on
+    try({
+        df = df %>%
             filter(
                 !(trimws(type_a) %in% c("CFB", "NCAA", "CBB", "NCAAF"))
             )
-    }
+
+    })
         
     # Figure out ranking of min_multiplier for each timestamp
     df = df %>% 
@@ -68,7 +72,7 @@ for(csv_file in csv_files){
     # Rename min_multiplier = -neg_min_multiplier
     df = df %>% 
         mutate(
-            row_str = case_when(row == 1 ~ "Best Bet", row == 2 ~ "2nd Bet Bet"),
+            row_str = case_when(row == 1 ~ "1st Best Bet", row == 2 ~ "2nd Bet Bet"),
             min_multiplier = -neg_min_multiplier,
         )
 
