@@ -25,111 +25,6 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
-
-# Updated regex pattern
-regex = re.compile(
-    r'^(?P<player>[A-Za-z.\' \-]+)(?P<number>[\d.]+)(?P<stat>[A-Za-z +\'\-]+)'
-    r'(?P<game_start>[A-Z]{2,3}@[A-Z]{2,3}(?:\d{2}:\d{2}|[A-Za-z ]+\d{1,2}(?:AM|PM)))'
-    r'(?P<mult1>[\d.]+)x(?P<mult2>[\d.]+)x$'
-)
-
-regex = re.compile(
-    r'^(?P<player>[A-Za-z. ]+)(?P<number>[\d.]+)(?P<stat>[A-Za-z +]+)'
-    r'(?P<game_start>[A-Z]{3}@[A-Z]{3}\d{2}:\d{2}(?:AM|PM)?)'
-    r'(?P<mult1>[\d.]+)x(?P<mult2>[\d.]+)x$'
-)
-
-regex = re.compile(
-    r'^(?P<player>[A-Za-z.\' \-]+)(?P<number>[\d.]+)(?P<stat>[A-Za-z +\'\-]+)'
-    r'(?P<game_start>[A-Z]{2,3}@[A-Z]{2,3})(?P<mult1>[\d.]+)x(?P<mult2>[\d.]+)x$'
-)
-
-regex = re.compile(r'^(?P<player>[A-Za-z. ]+)(?P<number>[\d.]+)(?P<stat>[A-Za-z +]+)(?P<game_start>[A-Z]{3}@[A-Z]{3}\d{2}:\d{2}(?:AM|PM)?)(?P<mult1>[\d.]+)x(?P<mult2>[\d.]+)x$')
-
-
-
-def find_and_click_button(driver):
-    """
-    Locates and clicks the button containing a span with an SVG icon
-    with data-icon='xmark'. If the button doesn't exist or can't be clicked,
-    an exception will be raised.
-
-    Args:
-        driver (selenium.webdriver): The Selenium WebDriver instance.
-
-    Returns:
-        bool: True if the button was found and clicked, False otherwise.
-    """
-    try:
-        # Wait for the button to exist
-        button = WebDriverWait(driver, 10).until(
-            EC.presence_of_element_located((By.XPATH, "//button[span/svg[@data-icon='xmark']]"))
-        )
-
-        # Ensure the button is clickable
-        WebDriverWait(driver, 10).until(
-            EC.element_to_be_clickable((By.XPATH, "//button[span/svg[@data-icon='xmark']]"))
-        )
-
-        # Scroll into view if necessary
-        driver.execute_script("arguments[0].scrollIntoView(true);", button)
-
-        # Click the button
-        button.click()
-        print("Button clicked successfully.")
-        return True
-    except Exception as e:
-        print(f"Error clicking the button: {e}")
-        return False
-
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-
-def click_first_button_in_modal(driver):
-    """
-    Locates the first button inside a modal div (with `role="dialog"` and `aria-labelledby`)
-    and clicks it.
-
-    Args:
-        driver (selenium.webdriver): The Selenium WebDriver instance.
-
-    Returns:
-        bool: True if the button was found and clicked, False otherwise.
-    """
-    try:
-        # Wait for the modal div to exist
-        modal = WebDriverWait(driver, 10).until(
-            EC.presence_of_element_located((By.XPATH, "//div[@role='dialog' and @aria-labelledby]"))
-        )
-
-        # Locate the first button inside the modal
-        button = modal.find_element(By.XPATH, ".//button")
-
-        print(f"Found button inside modal")
-        print(button)
-
-        # Ensure the button is clickable
-        WebDriverWait(driver, 10).until(
-            EC.element_to_be_clickable((By.XPATH, ".//button"))
-        )
-
-        # Scroll into view if necessary
-        driver.execute_script("arguments[0].scrollIntoView(true);", button)
-
-        # Click the button
-        button.click()
-        print("Button clicked successfully.")
-        return True
-    except Exception as e:
-        print(f"Error clicking the button in the modal: {e}")
-        return False
-
-
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-
 def click_modal_button(driver):
     """
     Locates the first button underneath a modal div with the attributes:
@@ -164,16 +59,6 @@ def click_modal_button(driver):
         print(f"Error clicking the modal button: {e}")
         return False
 
-
-def parse_and_add_fields(data_dict):
-    """Parses the 'text' field of a dictionary using regex and adds extracted fields."""
-    text = data_dict.get('text', '')
-    match = regex.match(text)
-    if match:
-        data_dict.update(match.groupdict())
-    else:
-        print(f"Failed to parse text: {text}")
-    return data_dict
 
 # Function to process the HTML and extract matching pairs
 def process_html(page_source):
@@ -242,7 +127,6 @@ def process_html(page_source):
                 print(f"Error parsing additional fields: {e}")
                 pass
 
-            # pair = parse_and_add_fields(pair)
             pairs.append(pair)
 
     # Sort pairs by product (desc) and standard deviation (asc)
@@ -343,11 +227,6 @@ def scrape_pp():
                             pass
                             # print(f"Error clicking 'Change card style' button: {e}")
 
-                        # # Save a screenshot
-                        # screenshot_fn = f"screenshot-{a_button.text}-{b_button.text}.png"
-                        # driver.save_screenshot(screenshot_fn)
-                        # print(f"Screenshot saved to {screenshot_fn}")
-
                         # Get the page source
                         page_source = driver.page_source
 
@@ -367,9 +246,6 @@ def scrape_pp():
                                 result["type_b"] = b_button.text  # Add Type B category (e.g., Rebounds)
                                 file.write(json.dumps(result) + "\n")
                                 out.append(result)
-                                # Print the JSON object to the console after saving
-                                # print(json.dumps(result, indent=4))
-                                # pprint(result)
 
                     except Exception as e:
                         print(f"Error processing Type B button: {e}")
@@ -385,88 +261,6 @@ def scrape_pp():
 
     return out
 
-
-def create_figure(input_file_path, output_file_path):
-    try:
-        # Read the JSONL file
-        data = []
-        with open(input_file_path, 'r') as file:
-            for line in file:
-                try:
-                    data.append(json.loads(line))
-                except json.JSONDecodeError:
-                    print(f"Skipping invalid line: {line.strip()}")
-
-        data = list(set(data))
-        if not data:
-            print("No valid data found in the file.")
-            return
-
-        # Create a DataFrame
-        df = pd.DataFrame(data)
-        df = df.drop_duplicates()
-
-        # Ensure required columns
-        required_columns = ['multiplier1', 'multiplier2', 'timestamp', 'text']
-        for col in required_columns:
-            if col not in df.columns:
-                print(f"Missing required column: {col}")
-                return
-
-        # Convert timestamp to datetime
-        df['timestamp'] = pd.to_datetime(df['timestamp'], errors='coerce')
-        df = df.dropna(subset=['timestamp'])
-
-        # Calculate the min_multiplier and the product
-        df['min_multiplier'] = df[['multiplier1', 'multiplier2']].min(axis=1)
-        df['product'] = df['multiplier1'] * df['multiplier2']
-
-        # For each timestamp, find the row with max min_multiplier, then max product
-        selected_rows = (
-            df.sort_values(by=['timestamp', 'min_multiplier', 'product'], ascending=[True, False, False])
-            .groupby('timestamp')
-            .first()
-            .reset_index()
-        )
-
-        print(selected_rows)
-
-        # Get the last timestamp's maximum product
-        last_row = selected_rows.iloc[-1]
-        last_timestamp = last_row['timestamp']
-        last_product = last_row['product']
-        last_text = last_row.get('text', 'N/A')
-
-        # Plot the data
-        plt.figure(figsize=(12, 6))
-        plt.plot(selected_rows['timestamp'], selected_rows['product'], marker='o', label='Max Product (Filtered)')
-        plt.title("Maximum Product with Maximum Minimum Multiplier Over Time")
-        plt.xlabel("Timestamp")
-        plt.ylabel("Product")
-        plt.xticks(rotation=45)
-        plt.grid(True)
-
-        # Annotate the plot
-        plt.annotate(
-            f"{last_text}\nProduct: {last_product:.2f}",
-            xy=(last_timestamp, last_product),
-            xytext=(last_timestamp, last_product + 0.02),
-            arrowprops=dict(facecolor='red', arrowstyle='->', lw=1.5),
-            fontsize=10,
-            color='blue'
-        )
-
-        plt.legend()
-        plt.tight_layout()
-
-        # Save the plot
-        plt.savefig(output_file_path, format='pdf')
-        plt.close()
-
-        print(f"Plot saved to {output_file_path}")
-
-    except Exception as e:
-        print(f"An error occurred: {e}")
 
 
 def create_figure(input_file_path, output_file_path):
@@ -566,9 +360,6 @@ def create_figure(input_file_path, output_file_path):
         print(f"An error occurred: {e}")
 
 
-
-# Example usage:
-# create_figure('input.jsonl', 'output.pdf')
 def convert_jsonl_to_csv(input_file_path, output_file_path):
     """Converts a JSONL file to a CSV file."""
     try:
@@ -598,14 +389,14 @@ def convert_jsonl_to_csv(input_file_path, output_file_path):
 
 
 def create_plots_with_r():
-    # Run /Users/theo/Dropbox (MIT)/betting/pp-plot.R to /dev/null
+    """Creates plots using R scripts."""
     subprocess.run(["Rscript", "pp-plot.R"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
 
 if __name__ == "__main__":
 
     TIMESTAMP = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    print(f"Starting at {TIMESTAMP}")
+    print(f"[{TIMESTAMP}] Beginning Scrape")
 
     create_plots_with_r()
     results = scrape_pp()
@@ -619,14 +410,6 @@ if __name__ == "__main__":
     print("Top 5 Results:")
     pprint(results[:5])
     print("*************************\n\n\n")
-
-    # output_dir = "/Users/theo/Dropbox (MIT)/betting/output-pp-selenium"
-    # jsonl_files = os.listdir(output_dir)
-    # jsonl_files = [f for f in jsonl_files if f.endswith(".jsonl")]
-    # for jsonl_file in jsonl_files:
-    #     input_file_path = os.path.join(output_dir, jsonl_file)
-    #     output_file_path = input_file_path.replace(".jsonl", ".pdf")
-    #     create_figure(input_file_path, output_file_path)
 
     output_dir = "output-pp-selenium"
     jsonl_files = os.listdir(output_dir)
