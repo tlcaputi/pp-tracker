@@ -1,5 +1,5 @@
 
-
+options(echo = FALSE)
 if(!require("pacman")) install.packages("pacman")
 pacman::p_load(logger, glue, dplyr, tidyverse, lubridate)
 

@@ -398,7 +398,7 @@ def convert_jsonl_to_csv(input_file_path, output_file_path):
 
 def create_plots_with_r():
     """Creates plots using R scripts."""
-    subprocess.run(["Rscript", "pp-plot.R"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    subprocess.run(["Rscript", "pp-plot.R"])
 
 
 if __name__ == "__main__":
