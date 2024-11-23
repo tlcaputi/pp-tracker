@@ -44,6 +44,8 @@ for(idx in seq_along(csv_files)) {
             mutate(
                 text = glue("{player_name} {number} {stat}\n{game}-{game_time} ({multiplier1} x {multiplier2} = {product})\n{timestamp}")
             )
+
+        df = df %>% filter(tolower(number) != "points")
     })
 
     # Remove college games, which I can't bet on
