@@ -42,7 +42,7 @@ for(idx in seq_along(csv_files)) {
     try({
         df = df %>%
             mutate(
-                text = glue("{player_name} {number} {stat}\n{game}-{game_time} ({multiplier1} x {multiplier2} = {product})")
+                text = glue("{player_name} {number} {stat}\n{game}-{game_time} ({multiplier1} x {multiplier2} = {product})\n{timestamp}")
             )
     })
 
