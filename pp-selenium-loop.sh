@@ -15,6 +15,7 @@ while true; do
         git add .
         git commit -m "updating parlayplay plot for ${timestamp}"
         git push
+        echo "Update pushed to git at ${timestamp}"
     fi
 
     # Run the Python script using the local pyenv Python version
@@ -24,5 +25,5 @@ while true; do
     ((counter++))
 
     # Wait for 3 minutes
-    sleep 180
+    sleep 30
 done

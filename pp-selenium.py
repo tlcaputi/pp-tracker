@@ -181,7 +181,7 @@ def scrape_pp():
         type_a_buttons = driver.find_elements(By.CSS_SELECTOR, 'button[id^="league-"]')
 
         # Iterate over each Type A button
-        for idx_a, a_button in enumerate(type_a_buttons):
+        for idx_a, a_button in enumerate(type_a_buttons[:3]):
             try:
                 # Skip the "league-Promo" button
                 if a_button.get_attribute("id") == "league-Promo":
@@ -382,7 +382,8 @@ def convert_jsonl_to_csv(input_file_path, output_file_path):
         # Save the DataFrame to a CSV file
         df.to_csv(output_file_path, index=False)
 
-        print(f"CSV file saved to: {output_file_path}")
+        TIMESTAMP_STR = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        print(f"[{TIMESTAMP_STR}] CSV file saved to: {output_file_path}")
 
     except Exception as e:
         print(f"An error occurred: {e}")
@@ -418,4 +419,8 @@ if __name__ == "__main__":
         input_file_path = os.path.join(output_dir, jsonl_file)
         output_file_path = input_file_path.replace(".jsonl", ".csv")
         convert_jsonl_to_csv(input_file_path, output_file_path)
+    
+    # Create figures with R
     create_plots_with_r()
+    TIMESTAMP_STR = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    print(f"[{TIMESTAMP_STR}] FIGURES CREATED")
