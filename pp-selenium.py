@@ -179,9 +179,16 @@ def scrape_pp():
 
         # Find all Type A buttons
         type_a_buttons = driver.find_elements(By.CSS_SELECTOR, 'button[id^="league-"]')
+        filtered_type_a_buttons = []
+        for button in type_a_buttons:
+            id = button.get_attribute("id")
+            if id == "league-Promo":
+                continue
+            if any(x.upper() in id for x in ["NBA", "NFL", "NHL", "MLB"]):
+                filtered_type_a_buttons.append(button)
 
         # Iterate over each Type A button
-        for idx_a, a_button in enumerate(type_a_buttons[:3]):
+        for idx_a, a_button in enumerate(filtered_type_a_buttons):
             try:
                 # Skip the "league-Promo" button
                 if a_button.get_attribute("id") == "league-Promo":
