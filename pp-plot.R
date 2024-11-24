@@ -100,12 +100,15 @@ for(idx in c(1)) {
             min_multiplier_1 = min_multiplier[row == 1],
             min_multiplier_2 = min_multiplier[row == 2]
         ) %>%
-        ungroup()
+        ungroup() 
 
     with(tmp, table(min_multiplier_1 >= min_multiplier_2)) %>% print()
     with(tmp, table(min_multiplier_1 <= min_multiplier_2)) %>% print()
+    with(tmp, table(min_multiplier_1 > min_multiplier_2)) %>% print()
+    with(tmp, table(min_multiplier_1 < min_multiplier_2)) %>% print()
 
     tmp %>% 
+        filter(min_multiplier_1 != min_multiplier_2) %>% 
         head(30) %>% 
         as.data.frame() %>% 
         print()
