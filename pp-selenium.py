@@ -140,6 +140,7 @@ def process_html(page_source):
 
 
 def scrape_pp():
+    SLEEP_TIME = 1
 
     out = []
 
@@ -168,12 +169,12 @@ def scrape_pp():
         # Open the website
         homepage_url = "https://parlayplay.io"
         driver.get(homepage_url)
-        time.sleep(5)  # Allow the page to load
+        time.sleep(5+random.random())  # Allow the page to load
 
         try:
             # Close the location prompt
             click_modal_button(driver)
-            time.sleep(1+random.random())
+            time.sleep(SLEEP_TIME+random.random())
         except Exception as e:
             print(f"Error closing location prompt: {e}")
 
@@ -202,9 +203,9 @@ def scrape_pp():
 
                 if idx_a > 0:
                     # Click the Type A button
-                    # a_button.click()
-                    ActionChains(driver).move_to_element(a_button).click().perform()
-                    time.sleep(5+random.random())  # Wait for the page to update
+                    a_button.click()
+                    # ActionChains(driver).move_to_element(a_button).click().perform()
+                    time.sleep(SLEEP_TIME+random.random())  # Wait for the page to update
 
                 # Find all Type B buttons under the current Type A category
                 type_b_buttons = driver.find_elements(By.CSS_SELECTOR, 'button.mx-2.border-b-2')
@@ -222,10 +223,11 @@ def scrape_pp():
                     try:
 
                         if idx_b > 0:
+                            # continue
                             # Click the Type B button
-                            ActionChains(driver).move_to_element(b_button).click().perform()
-                            # b_button.click()
-                            time.sleep(5+random.random())  # Wait for the page to update
+                            # ActionChains(driver).move_to_element(b_button).click().perform()
+                            b_button.click()
+                            time.sleep(SLEEP_TIME+random.random())  # Wait for the page to update
 
                         # Pretty print the current driver page_source
                         # print(BeautifulSoup(driver.page_source, "html.parser").prettify())
@@ -239,7 +241,7 @@ def scrape_pp():
                             change_card_style_button = driver.find_element(By.CSS_SELECTOR, 
                                 'button[aria-label="Change card style from list"]')
                             change_card_style_button.click()
-                            time.sleep(1+random.random())  # Wait for the page to update
+                            time.sleep(SLEEP_TIME+random.random())  # Wait for the page to update
                         except Exception as e:
                             pass
                             # print(f"Error clicking 'Change card style' button: {e}")
