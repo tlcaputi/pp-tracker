@@ -68,6 +68,9 @@ for(idx in seq_along(csv_files)) {
     # For each timestamp, only take the two largest min_multipliers
     df = df %>% 
         arrange(timestamp, neg_min_multiplier_rank, desc(product)) %>%
+        group_by(game) %>% 
+        slice_head(n=1) %>% 
+        ungroup() %>% 
         group_by(timestamp) %>% 
         slice_head(n=2) %>%
         mutate(
