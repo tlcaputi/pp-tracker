@@ -239,9 +239,9 @@ def scrape_pp():
                             pass
                             # print(f"Error clicking 'Change card style' button: {e}")
 
-                        screenshot_fn = f"screenshot-{a_button.text}-{b_button.text}.png"
-                        driver.save_screenshot(screenshot_fn)
-                        print(f"Screenshot saved to {screenshot_fn}")
+                        # screenshot_fn = f"screenshot-{a_button.text}-{b_button.text}.png"
+                        # driver.save_screenshot(screenshot_fn)
+                        # print(f"Screenshot saved to {screenshot_fn}")
 
                         # Get the page source
                         page_source = driver.page_source
