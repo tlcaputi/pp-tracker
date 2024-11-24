@@ -261,8 +261,12 @@ def scrape_pp():
                                 result["timestamp"] = TIMESTAMP  # Add timestamp
                                 result["type_a"] = a_button.text  # Add Type A category (e.g., NBA)
                                 result["type_b"] = b_button.text  # Add Type B category (e.g., Rebounds)
-                                json_results.append(json.dumps(result) + "\n")
+                                json_results.append(json.dumps(result))
                                 out.append(result)
+                            
+                            json_results = list(set(json_results))  # Remove duplicates
+                            for json_result in json_results:
+                                file.write(json_result + "\n")
 
                     except Exception as e:
                         print(f"Error processing Type B button: {e}")
