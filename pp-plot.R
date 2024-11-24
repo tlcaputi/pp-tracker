@@ -155,7 +155,19 @@ for(idx in seq_along(csv_files)) {
             max_product = max(product, na.rm = T),
             min_product = min(product, na.rm = T),
             max_min_multiplier = max(min_multiplier, na.rm = T),
-            min_min_multiplier = min(min_multiplier, na.rm = T)
+            min_min_multiplier = min(min_multiplier, na.rm = T),
+            product_1 = first(product[row == 1]),
+            product_2 = first(product[row == 2]),
+            multiplier_1 = first(min_multiplier[row == 1]),
+            multiplier_2 = first(min_multiplier[row == 2]),
+            other_product = case_when(
+                row == 1 ~ product_2,
+                row == 2 ~ product_1
+            ),
+            other_multiplier = case_when(
+                row == 1 ~ multiplier_2,
+                row == 2 ~ multiplier_1
+            ),
         ) %>% 
         mutate(
             product_text_y = case_when(
@@ -166,6 +178,9 @@ for(idx in seq_along(csv_files)) {
                 max_min_multiplier == min_min_multiplier ~ if_else(row == 1, min_multiplier + MAX_MULTIPLIER_SCALE, min_multiplier - MAX_MULTIPLIER_SCALE),
                 T ~ min_multiplier
             ),
+            product_text_y = case_when(
+                abs(min_multiplier - other_multiplier) < (2*MAX_MULTIPLIER_SCALE) ~ if_else(product == max_product, product + MAX_PRODUCT_SCALE, product - MAX_PRODUCT_SCALE),
+            )
         )
 
     ## MIN MULTIPLIER PLOT
