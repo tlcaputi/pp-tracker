@@ -138,8 +138,8 @@ for(idx in seq_along(csv_files)) {
     MIN_MULTIPLIER = min(df$min_multiplier, na.rm = T)
     MAX_PRODUCT = max(df$product, na.rm = T)
     MIN_PRODUCT = min(df$product, na.rm = T)
-    MAX_MULTIPLIER_SCALE = max(MAX_MULTIPLIER - MIN_MULTIPLIER, 0.05) / 15
-    MAX_PRODUCT_SCALE = max(MAX_PRODUCT - MIN_PRODUCT, 0.05) / 20
+    MAX_MULTIPLIER_SCALE = max(MAX_MULTIPLIER - MIN_MULTIPLIER, 0.05) / 10
+    MAX_PRODUCT_SCALE = max(MAX_PRODUCT - MIN_PRODUCT, 0.05) / 10
 
     # Extract last timestamps
     last_timestamps = df %>% 
@@ -179,8 +179,13 @@ for(idx in seq_along(csv_files)) {
                 T ~ min_multiplier
             ),
             product_text_y = case_when(
-                abs(min_multiplier - other_multiplier) < (2*MAX_MULTIPLIER_SCALE) ~ if_else(product == max_product, product + MAX_PRODUCT_SCALE, product - MAX_PRODUCT_SCALE),
-            )
+                abs(product - other_product) < (2*MAX_PRODUCT_SCALE) ~ if_else(row == 1, product + MAX_PRODUCT_SCALE, product - MAX_PRODUCT_SCALE),
+                T ~ product
+            ),
+            min_multiplier_text_y = case_when(
+                abs(min_multiplier - other_multiplier) < (2*MAX_MULTIPLIER_SCALE) ~ if_else(row == 1, min_multiplier + MAX_MULTIPLIER_SCALE, min_multiplier - MAX_MULTIPLIER_SCALE),
+                T ~ min_multiplier
+            ),
         )
 
     ## MIN MULTIPLIER PLOT
