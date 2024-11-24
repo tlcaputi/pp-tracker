@@ -5,7 +5,8 @@ pacman::p_load(logger, glue, dplyr, tidyverse, lubridate)
 
 # Go through and process all csv files in the output-pp-selenium directory
 csv_files = rev(list.files("output-pp-selenium", pattern=".csv", full.names=TRUE))
-for(idx in seq_along(csv_files)) {
+# for(idx in seq_along(csv_files)) {
+for(idx in c(1)) {
 
     csv_file = csv_files[idx]
 
@@ -32,11 +33,11 @@ for(idx in seq_along(csv_files)) {
 
     # Put a linebreak in the middle of text
     df = df %>% 
-    mutate(
-        text_nchar = nchar(text),
-        half_text_nchar = round(text_nchar / 2),
-        text = glue("{substr(text, 1, half_text_nchar)}\n{substr(text, half_text_nchar + 1, text_nchar)}"),
-    )
+        mutate(
+            text_nchar = nchar(text),
+            half_text_nchar = round(text_nchar / 2),
+            text = glue("{substr(text, 1, half_text_nchar)}\n{substr(text, half_text_nchar + 1, text_nchar)}"),
+        )
 
     # When the data is correctly parsed, we can create a better text field
     try({
@@ -44,8 +45,6 @@ for(idx in seq_along(csv_files)) {
             mutate(
                 text = glue("{player_name} {number} {stat}\n{game}-{game_time} ({multiplier1} x {multiplier2} = {product})\n{timestamp}")
             )
-
-        # df = df %>% filter(tolower(stat) != "points")
     })
 
     # Remove college games, which I can't bet on
@@ -67,16 +66,32 @@ for(idx in seq_along(csv_files)) {
         
     # For each timestamp, only take the two largest min_multipliers
     df = df %>% 
-        arrange(timestamp, neg_min_multiplier_rank, desc(product)) %>%
-        group_by(game) %>% 
-        slice_head(n=1) %>% 
-        ungroup() %>% 
+        arrange(timestamp, neg_min_multiplier_rank, desc(product)) 
+        
+    # Only want one observation per game
+    try({
+        df = df %>%
+            group_by(timestamp, game, game_time) %>% 
+            slice_head(n=1) %>% 
+            ungroup() 
+    })
+
+    df %>%
+        head(30) %>%
+        as.data.frame() %>%
+        print()
+
+
+        
+    df = df %>% 
         group_by(timestamp) %>% 
         slice_head(n=2) %>%
         mutate(
             row = row_number(),
         ) %>% 
         ungroup() 
+    
+    df %>% head(30) %>% as.data.frame() %>% print()
         
     # Rename min_multiplier = -neg_min_multiplier
     df = df %>% 
