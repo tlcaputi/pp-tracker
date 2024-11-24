@@ -225,11 +225,14 @@ def scrape_pp():
                             # Click the Type B button
                             ActionChains(driver).move_to_element(b_button).click().perform()
                             # b_button.click()
-                            time.sleep(1+random.random())  # Wait for the page to update
+                            time.sleep(2+random.random())  # Wait for the page to update
 
                         # Pretty print the current driver page_source
                         # print(BeautifulSoup(driver.page_source, "html.parser").prettify())
 
+                        screenshot_fn = f"screenshot-{a_button.text}-{b_button.text}.png"
+                        driver.save_screenshot(screenshot_fn)
+                        print(f"Screenshot saved to {screenshot_fn}")
 
                         # Click the "Change card style" button
                         try:
