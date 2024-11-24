@@ -251,6 +251,7 @@ def scrape_pp():
 
                         # Save each result as a JSON object
                         with open(output_file, "a") as file:
+                            json_results = []
                             for result in results:
                                 if result["product"] >= 3.45 and result["multiplier1"] >= 1.8 and result["multiplier2"] >= 1.8:
                                     print("\n\n\n*************************")
@@ -260,7 +261,7 @@ def scrape_pp():
                                 result["timestamp"] = TIMESTAMP  # Add timestamp
                                 result["type_a"] = a_button.text  # Add Type A category (e.g., NBA)
                                 result["type_b"] = b_button.text  # Add Type B category (e.g., Rebounds)
-                                file.write(json.dumps(result) + "\n")
+                                json_results.append(json.dumps(result) + "\n")
                                 out.append(result)
 
                     except Exception as e:
