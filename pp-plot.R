@@ -96,7 +96,7 @@ for(idx in c(1)) {
 
     tmp = df %>% 
         group_by(timestamp) %>% 
-        summarise(
+        mutate(
             min_multiplier_1 = min_multiplier[row == 1],
             min_multiplier_2 = min_multiplier[row == 2]
         ) %>%
