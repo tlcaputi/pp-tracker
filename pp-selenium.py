@@ -414,7 +414,7 @@ if __name__ == "__main__":
     TIMESTAMP = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     print(f"[{TIMESTAMP}] Beginning Scrape")
 
-    create_plots_with_r()
+    # create_plots_with_r()
     results = scrape_pp()
 
     # Sort by product (descending) and standard deviation (ascending)

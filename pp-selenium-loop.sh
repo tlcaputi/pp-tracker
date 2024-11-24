@@ -13,6 +13,8 @@ while true; do
     pyenv exec python /home/theo/pp-tracker/pp-selenium.py
 
     # Perform git operations every 5 runs
+    echo "Counter: ${counter}"
+    echo "Checking if we should push to git"
     if ((counter % 1 == 0)); then
         timestamp=$(date '+%Y-%m-%d %H:%M:%S')
         git add .
