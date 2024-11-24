@@ -6,7 +6,7 @@ pacman::p_load(logger, glue, dplyr, tidyverse, lubridate)
 # Go through and process all csv files in the output-pp-selenium directory
 csv_files = rev(list.files("output-pp-selenium", pattern=".csv", full.names=TRUE))
 # for(idx in seq_along(csv_files)) {
-for(idx in c(1)) {
+for(idx in seq_along(csv_files)) {
 
     csv_file = csv_files[idx]
 
@@ -97,8 +97,8 @@ for(idx in c(1)) {
     tmp = df %>% 
         group_by(timestamp) %>% 
         mutate(
-            min_multiplier_1 = min_multiplier[row == 1],
-            min_multiplier_2 = min_multiplier[row == 2]
+            min_multiplier_1 = first(min_multiplier[row == 1]),
+            min_multiplier_2 = first(min_multiplier[row == 2])
         ) %>%
         ungroup() 
 
