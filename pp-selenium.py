@@ -70,8 +70,8 @@ def process_html(page_source):
     bet_containers = soup.select(".w-full.mx-auto.mt-2.text-center.text-black")
     for bet_container in bet_containers:
 
-        # Exclude ongoing games
-        if 'alt="clock' in str(bet_container).replace(" ", "").lower():
+        # Exclude live bets, which are too volatile
+        if 'alt="clock"' in str(bet_container).replace(" ", "").lower():
             continue
 
         row = bet_container.select(".flex.flex-row.items-center.mt-2.justify-evenly")[0]
