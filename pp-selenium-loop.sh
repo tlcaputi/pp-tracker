@@ -18,7 +18,7 @@ while true; do
     if ((counter % 1 == 0)); then
         timestamp=$(date '+%Y-%m-%d %H:%M:%S')
         git add .
-        git commit -m "updating parlayplay plot for ${timestamp}"
+        git commit -m "updating pp plot for ${timestamp}"
         git push
         echo "Update pushed to git at ${timestamp}"
     fi

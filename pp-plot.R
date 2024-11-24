@@ -207,7 +207,7 @@ for(idx in c(1)) {
         geom_point() +
         geom_line() +
         labs(
-            title = "ParlayPlay Max Min Multiplier",
+            title = "PP Max Min Multiplier",
             subtitle = "Choose when the two min multipliers are the largest",
             x = "Timestamp",
             y = "Product",
