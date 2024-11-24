@@ -27,7 +27,8 @@ for(idx in c(1)) {
     # Define variables        
     df = df %>%
         mutate(
-            neg_min_multiplier = -pmin(multiplier1, multiplier2),
+            min_multiplier = pmin(multiplier1, multiplier2),
+            neg_min_multiplier = -min_multiplier,
             product = multiplier1 * multiplier2
         ) 
 
@@ -76,10 +77,10 @@ for(idx in c(1)) {
             ungroup() 
     })
 
-    df %>%
-        head(30) %>%
-        as.data.frame() %>%
-        print()
+    # df %>%
+    #     head(30) %>%
+    #     as.data.frame() %>%
+    #     print()
 
 
     df = df %>%
@@ -96,13 +97,13 @@ for(idx in c(1)) {
     tmp = df %>% 
         group_by(timestamp) %>% 
         summarise(
-            min_multiplier_1 = min_multiplier[row == 1].
+            min_multiplier_1 = min_multiplier[row == 1],
             min_multiplier_2 = min_multiplier[row == 2]
         ) %>%
         ungroup()
 
-    with(tmp, table(min_multiplier_1 >= min_multiplier_2))
-    with(tmp, table(min_multiplier_1 <= min_multiplier_2))
+    with(tmp, table(min_multiplier_1 >= min_multiplier_2)) %>% print()
+    with(tmp, table(min_multiplier_1 <= min_multiplier_2)) %>% print()
 
     tmp %>% 
         head(30) %>% 
