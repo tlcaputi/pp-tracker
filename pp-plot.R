@@ -82,7 +82,9 @@ for(idx in c(1)) {
         print()
 
 
-        
+    df = df %>%
+            arrange(timestamp, neg_min_multiplier_rank, desc(product))
+
     df = df %>% 
         group_by(timestamp) %>% 
         slice_head(n=2) %>%
@@ -90,8 +92,24 @@ for(idx in c(1)) {
             row = row_number(),
         ) %>% 
         ungroup() 
+
+    tmp = df %>% 
+        group_by(timestamp) %>% 
+        summarise(
+            min_multiplier_1 = min_multiplier[row == 1].
+            min_multiplier_2 = min_multiplier[row == 2]
+        ) %>%
+        ungroup()
+
+    with(tmp, table(min_multiplier_1 >= min_multiplier_2))
+    with(tmp, table(min_multiplier_1 <= min_multiplier_2))
+
+    tmp %>% 
+        head(30) %>% 
+        as.data.frame() %>% 
+        print()
     
-    df %>% head(30) %>% as.data.frame() %>% print()
+    # df %>% head(30) %>% as.data.frame() %>% print()
         
     # Rename min_multiplier = -neg_min_multiplier
     df = df %>% 
