@@ -229,13 +229,6 @@ def scrape_pp():
                             b_button.click()
                             time.sleep(SLEEP_TIME+random.random())  # Wait for the page to update
 
-                        # Pretty print the current driver page_source
-                        # print(BeautifulSoup(driver.page_source, "html.parser").prettify())
-
-                        screenshot_fn = f"screenshot-{a_button.text}-{b_button.text}.png"
-                        driver.save_screenshot(screenshot_fn)
-                        print(f"Screenshot saved to {screenshot_fn}")
-
                         # Click the "Change card style" button
                         try:
                             change_card_style_button = driver.find_element(By.CSS_SELECTOR, 
@@ -245,6 +238,10 @@ def scrape_pp():
                         except Exception as e:
                             pass
                             # print(f"Error clicking 'Change card style' button: {e}")
+
+                        screenshot_fn = f"screenshot-{a_button.text}-{b_button.text}.png"
+                        driver.save_screenshot(screenshot_fn)
+                        print(f"Screenshot saved to {screenshot_fn}")
 
                         # Get the page source
                         page_source = driver.page_source
