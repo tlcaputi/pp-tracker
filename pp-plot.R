@@ -138,8 +138,8 @@ for(idx in seq_along(csv_files)) {
     MIN_MULTIPLIER = min(df$min_multiplier, na.rm = T)
     MAX_PRODUCT = max(df$product, na.rm = T)
     MIN_PRODUCT = min(df$product, na.rm = T)
-    MAX_MULTIPLIER_SCALE = max(MAX_MULTIPLIER - MIN_MULTIPLIER, 0.05) / 5
-    MAX_PRODUCT_SCALE = max(MAX_PRODUCT - MIN_PRODUCT, 0.05) / 5
+    MAX_MULTIPLIER_SCALE = max(MAX_MULTIPLIER - MIN_MULTIPLIER, 0.1) / 5
+    MAX_PRODUCT_SCALE = max(MAX_PRODUCT - MIN_PRODUCT, 0.1) / 5
 
     # Extract last timestamps
     last_timestamps = df %>% 
