@@ -6,7 +6,7 @@ pacman::p_load(logger, glue, dplyr, tidyverse, lubridate)
 # Go through and process all csv files in the output-pp-selenium directory
 csv_files = rev(list.files("output-pp-selenium", pattern=".csv", full.names=TRUE))
 # for(idx in seq_along(csv_files)) {
-for(idx in 1:length(csv_files)) {
+for(idx in c(1)) {
 
     csv_file = csv_files[idx]
 
