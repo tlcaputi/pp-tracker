@@ -5,8 +5,9 @@ pacman::p_load(logger, glue, dplyr, tidyverse, lubridate)
 
 # Go through and process all csv files in the output-pp-selenium directory
 csv_files = rev(list.files("output-pp-selenium", pattern=".csv", full.names=TRUE))
+
 # for(idx in seq_along(csv_files)) {
-for(idx in c(1)) {
+for(idx in 1:length(csv_files)) {
 
     csv_file = csv_files[idx]
 
@@ -24,7 +25,6 @@ for(idx in c(1)) {
     df = df %>% 
         distinct()
 
-    df %>% tail(10) %>% as.data.frame() %>% print()
     
     # Define variables        
     df = df %>%
@@ -58,6 +58,18 @@ for(idx in c(1)) {
             )
 
     })
+
+    # Remove games without a game or game_time
+    log_info("Removing games without a game or game_time")
+    df = df %>%
+        filter(
+            !is.na(game), !is.na(game_time), !is.na(timestamp), !is.na(multiplier1), !is.na(multiplier2), !is.na(product), !is.na(min_multiplier),
+            is.finite(multiplier1), is.finite(multiplier2), is.finite(product), is.finite(min_multiplier)
+        )
+
+    df %>% tail(10) %>% as.data.frame() %>% print()
+    # exit()
+
         
     # Figure out ranking of min_multiplier for each timestamp
     df = df %>% 
@@ -72,12 +84,14 @@ for(idx in c(1)) {
         arrange(timestamp, neg_min_multiplier_rank, desc(product)) 
         
     # Only want one observation per game
+    log_info("Only want one observation per game")
     try({
         df = df %>%
             group_by(timestamp, game, game_time) %>% 
             slice_head(n=1) %>% 
             ungroup() 
     })
+    log_info("nrow(df): {nrow(df)}")
 
     # df %>%
     #     head(30) %>%
@@ -88,6 +102,9 @@ for(idx in c(1)) {
     df = df %>%
             arrange(timestamp, neg_min_multiplier_rank, desc(product))
 
+
+    # Only take the two largest min_multipliers for each timestamp
+    log_info("Only take the two largest min_multipliers for each timestamp")
     df = df %>% 
         group_by(timestamp) %>% 
         slice_head(n=2) %>%
@@ -95,6 +112,9 @@ for(idx in c(1)) {
             row = row_number(),
         ) %>% 
         ungroup() 
+    log_info("nrow(df): {nrow(df)}")
+
+
 
     tmp = df %>% 
         group_by(timestamp) %>% 
@@ -104,19 +124,8 @@ for(idx in c(1)) {
         ) %>%
         ungroup() 
 
-    with(tmp, table(min_multiplier_1 >= min_multiplier_2)) %>% print()
-    with(tmp, table(min_multiplier_1 <= min_multiplier_2)) %>% print()
-    with(tmp, table(min_multiplier_1 > min_multiplier_2)) %>% print()
-    with(tmp, table(min_multiplier_1 < min_multiplier_2)) %>% print()
 
-    tmp %>% 
-        filter(min_multiplier_1 != min_multiplier_2) %>% 
-        head(30) %>% 
-        as.data.frame() %>% 
-        print()
-    
-    # df %>% head(30) %>% as.data.frame() %>% print()
-        
+
     # Rename min_multiplier = -neg_min_multiplier
     df = df %>% 
         mutate(
@@ -133,7 +142,7 @@ for(idx in c(1)) {
         ) %>% 
         ungroup() %>% 
         filter(
-            min_min_multiplier > 1.81
+            min_min_multiplier > 1.70
         )
 
     MAX_MULTIPLIER = max(df$min_multiplier, na.rm = T)
@@ -143,7 +152,17 @@ for(idx in c(1)) {
     MAX_MULTIPLIER_SCALE = max(MAX_MULTIPLIER - MIN_MULTIPLIER, 0.1) / 5
     MAX_PRODUCT_SCALE = max(MAX_PRODUCT - MIN_PRODUCT, 0.1) / 5
 
+    log_info("Max Multiplier: {MAX_MULTIPLIER}")
+    log_info("Min Multiplier: {MIN_MULTIPLIER}")
+    log_info("Max Product: {MAX_PRODUCT}")
+    log_info("Min Product: {MIN_PRODUCT}")
+    log_info("Max Multiplier Scale: {MAX_MULTIPLIER_SCALE}")
+    log_info("Max Product Scale: {MAX_PRODUCT_SCALE}")
+
+
     # Extract last timestamps
+    log_info("Extract last timestamps")
+    log_info("nrow(df): {nrow(df)}")
     last_timestamps = df %>% 
         arrange(desc(timestamp)) %>% 
         head(2) %>% 
@@ -190,9 +209,12 @@ for(idx in c(1)) {
             ),
         )
 
+
+    log_info("head(df)")
+    df %>% head(10) %>% as.data.frame() %>% print()
     log_info("Last timestamps")
     last_timestamps %>% as.data.frame() %>% print()
-    exit()
+    # exit()
 
     ## MIN MULTIPLIER PLOT
     # Plot two lines, one for the two largest min_multipliers by timestamp
@@ -227,7 +249,7 @@ for(idx in c(1)) {
     p = p + 
         scale_x_datetime(
             expand=c(0.01, 0.01),
-            limits=c(min(df$timestamp), max(df$timestamp) + hours(12))
+            limits=c(min(df$timestamp, na.rm = T), max(df$timestamp, na.rm = T) + hours(12))
         )
     
     # Extent plot vertically so that text is visible
@@ -282,7 +304,7 @@ for(idx in c(1)) {
     p = p +
         scale_x_datetime(
             expand = c(0.01, 0.01),
-            limits = c(min(df$timestamp), max(df$timestamp) + hours(12))
+            limits = c(min(df$timestamp, na.rm = T), max(df$timestamp, na.rm = T) + hours(12))
         )
 
     # Extent plot vertically so that text is visible

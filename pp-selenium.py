@@ -193,6 +193,8 @@ def scrape_pp():
             filtered_type_a_buttons.append(button)
             # if any(x.upper() in id for x in ["NBA"]):
             #     filtered_type_a_buttons.append(button)
+            # if any(x.upper() in id for x in ["NBA", "NFL", "NHL", "MLB", "VALORANT", "UCL", "UEL", "DOTA2"]):
+            #     filtered_type_a_buttons.append(button)
             # if any(x.upper() in id for x in ["NBA", "NFL", "NHL", "MLB"]):
             #     filtered_type_a_buttons.append(button)
 
