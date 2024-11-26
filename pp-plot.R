@@ -23,6 +23,8 @@ for(idx in c(1)) {
     # Only take unique observations
     df = df %>% 
         distinct()
+
+    df %>% tail(10) %>% as.data.frame() %>% print()
     
     # Define variables        
     df = df %>%
