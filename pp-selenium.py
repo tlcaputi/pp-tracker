@@ -239,9 +239,9 @@ def scrape_pp():
                             pass
                             # print(f"Error clicking 'Change card style' button: {e}")
 
-                        # screenshot_fn = f"screenshot-{a_button.text}-{b_button.text}.png"
-                        # driver.save_screenshot(screenshot_fn)
-                        # print(f"Screenshot saved to {screenshot_fn}")
+                        screenshot_fn = f"screenshot-{a_button.text}-{b_button.text}.png"
+                        driver.save_screenshot(screenshot_fn)
+                        print(f"Screenshot saved to {screenshot_fn}")
 
                         # Get the page source
                         page_source = driver.page_source
@@ -414,7 +414,8 @@ def convert_jsonl_to_csv(input_file_path, output_file_path):
 
 def create_plots_with_r():
     """Creates plots using R scripts."""
-    subprocess.run(["Rscript", "pp-plot.R"])
+    # subprocess.run(["Rscript", "pp-plot.R"])
+    subprocess.run(["Rscript", "pp-plot.R"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
 
 if __name__ == "__main__":
