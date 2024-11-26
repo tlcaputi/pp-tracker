@@ -189,14 +189,15 @@ def scrape_pp():
             id = button.get_attribute("id")
             if id == "league-Promo":
                 continue
+            filtered_type_a_buttons.append(button)
             # if any(x.upper() in id for x in ["NBA"]):
             #     filtered_type_a_buttons.append(button)
-            if any(x.upper() in id for x in ["NBA", "NFL", "NHL", "MLB"]):
-                filtered_type_a_buttons.append(button)
+            # if any(x.upper() in id for x in ["NBA", "NFL", "NHL", "MLB"]):
+            #     filtered_type_a_buttons.append(button)
 
-        screenshot_fn = f"screenshot-initial.png"
-        driver.save_screenshot(screenshot_fn)
-        print(f"Screenshot saved to {screenshot_fn}")
+        # screenshot_fn = f"screenshot-initial.png"
+        # driver.save_screenshot(screenshot_fn)
+        # print(f"Screenshot saved to {screenshot_fn}")
 
 
         # Iterate over each Type A button
