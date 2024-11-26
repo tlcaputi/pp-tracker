@@ -194,6 +194,11 @@ def scrape_pp():
             if any(x.upper() in id for x in ["NBA", "NFL", "NHL", "MLB"]):
                 filtered_type_a_buttons.append(button)
 
+        screenshot_fn = f"screenshot-initial.png"
+        driver.save_screenshot(screenshot_fn)
+        print(f"Screenshot saved to {screenshot_fn}")
+
+
         # Iterate over each Type A button
         for idx_a, a_button in enumerate(filtered_type_a_buttons):
             try:
