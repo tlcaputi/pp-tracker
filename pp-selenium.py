@@ -190,9 +190,9 @@ def scrape_pp():
             league = id.split("-")[1]
             if id == "league-Promo" or league[0] == "C":
                 continue
-            filtered_type_a_buttons.append(button)
-            # if any(x.upper() in id for x in ["NBA"]):
-            #     filtered_type_a_buttons.append(button)
+            # filtered_type_a_buttons.append(button)
+            if any(x.upper() in id for x in ["NBA"]):
+                filtered_type_a_buttons.append(button)
             # if any(x.upper() in id for x in ["NBA", "NFL", "NHL", "MLB", "VALORANT", "UCL", "UEL", "DOTA2"]):
             #     filtered_type_a_buttons.append(button)
             # if any(x.upper() in id for x in ["NBA", "NFL", "NHL", "MLB"]):
