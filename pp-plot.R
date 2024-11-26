@@ -190,6 +190,10 @@ for(idx in c(1)) {
             ),
         )
 
+    log_info("Last timestamps")
+    last_timestamps %>% as.data.frame() %>% print()
+    exit()
+
     ## MIN MULTIPLIER PLOT
     # Plot two lines, one for the two largest min_multipliers by timestamp
     p = ggplot(df, aes(x=timestamp, y=min_multiplier, color=row_str)) +
