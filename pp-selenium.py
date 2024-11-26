@@ -261,6 +261,7 @@ def scrape_pp():
                                 result["timestamp"] = TIMESTAMP  # Add timestamp
                                 result["type_a"] = a_button.text  # Add Type A category (e.g., NBA)
                                 result["type_b"] = b_button.text  # Add Type B category (e.g., Rebounds)
+                                pprint(result)
                                 json_results.append(json.dumps(result))
                                 out.append(result)
                             
